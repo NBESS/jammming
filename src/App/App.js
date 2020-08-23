@@ -11,22 +11,22 @@ class App extends Component {
     this.state = {
       searchResults: [
         {
-          id,
-          name,
-          artist,
-          album
+          id: 1,
+          name: 'Test name 1',
+          artist: 'Test artist 1',
+          album: 'Test album 1'
         },
         {
-          id,
-          name,
-          artist,
-          album
+          id: 2,
+          name: 'Test name 2',
+          artist: 'Test artist 2',
+          album: 'Test album 2'
         },
         {
-          id,
-          name,
-          artist,
-          album
+          id: 3,
+          name: 'Test name 3',
+          artist: 'Test artist 3',
+          album: 'Test album 3'
         },
       ]
     }
