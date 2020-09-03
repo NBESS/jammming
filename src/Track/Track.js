@@ -26,7 +26,7 @@ export default class Track extends Component {
     }
 
     render() {
-        const { name, artist, album } = this.props
+        const { name, artist, album } = this.props.track
         return (
             <div className="Track">
                 <div className="Track-information">
