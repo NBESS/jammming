@@ -84,6 +84,10 @@ class App extends Component {
     let playlist = JSON.parse(playlistJSON);
     let playlistName = localStorage.getItem('playlistName');
 
+    if (playlist == null) {
+      playlist = [];
+    }
+
     if (playlist.length) {
       this.setState({ playlistTracks: playlist })
 
