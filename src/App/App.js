@@ -6,14 +6,17 @@ import Playlist from '../Playlist/Playlist';
 
 import Spotify from '../util/Spotify';
 
+// let storedPlaylistName = localStorage.getItem('playlistName');
+
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       searchResults: [],
-      playlistName: 'First Test Playlist',
-      playlistTracks: [],
+      playlistName: '',
+      playlistTracks: []
     }
 
     this.addTrack = this.addTrack.bind(this);
@@ -29,24 +32,45 @@ class App extends Component {
       return;
     }
     this.setState({ playlistTracks: [...this.state.playlistTracks, track,] })
+    let playlistJSON = localStorage.getItem('playlist');
+    let playlist = JSON.parse(playlistJSON);
+
+
+    if (playlist == null) {
+      playlist = [];
+    }
+    playlist = this.state.playlistTracks;
+    playlistJSON = JSON.stringify(playlist)
+    localStorage.setItem('playlist', playlistJSON)
+
+
   }
 
   removeTrack(track) {
-    let newPlaylist = this.state.playlistTracks.filter(currentTrack => currentTrack.id !== track.id);
-    this.setState({ playlistTracks: newPlaylist });
+    let filteredPlaylist = this.state.playlistTracks.filter(currentTrack => currentTrack.id !== track.id);
+    let playlistJSON = localStorage.getItem('playlist')
+    let playlist = JSON.parse(playlistJSON);
+
+    let playlistToStore = playlist.filter(currentTrack => currentTrack.id !== track.id);
+    playlistJSON = JSON.stringify(playlistToStore)
+    localStorage.setItem('playlist', playlistJSON)
+    this.setState({ playlistTracks: filteredPlaylist })
   }
 
   updatePlaylistName(name) {
     this.setState({ playlistName: name })
+    localStorage.setItem('playlistName', name)
   }
 
   savePlaylist() {
+
     let trackURIs = this.state.playlistTracks.map(track => track.uri)
     Spotify.savePlaylist(this.state.playlistName, trackURIs)
     this.setState({
       playlistName: 'New Playlist',
-      playlistTracks: [],
+      playlistTracks: []
     })
+    localStorage.clear()
   }
 
   search(term) {
@@ -55,7 +79,29 @@ class App extends Component {
   }
 
 
+  componentDidMount() {
+    let playlistJSON = localStorage.getItem('playlist');
+    let playlist = JSON.parse(playlistJSON);
+    let playlistName = localStorage.getItem('playlistName');
+
+    if (playlist.length) {
+      this.setState({ playlistTracks: playlist })
+
+    }
+    if (playlistName && playlist.length) {
+      this.setState({ playlistName: playlistName })
+
+    } else {
+      this.setState({ playlistName: 'New Playlist' })
+    }
+
+
+  }
+
+
   render() {
+
+
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
